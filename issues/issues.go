@@ -5,15 +5,12 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"os"
 	"strings"
 	"time"
 )
 
 const baseURL = "https://api.github.com/search/issues"
 const userURL = "https://api.github.com/users/"
-
-var githubToken = os.Getenv("GITHUB_TOKEN")
 
 type IssueSearchResult struct {
 	TotalCount int `json:"total_count"`
@@ -53,7 +50,7 @@ func SearchIssues(terms []string) (*IssueSearchResult, error) {
 	q := url.QueryEscape(strings.Join(terms, " "))
 	client := http.Client{Timeout: 10 * time.Second}
 
-	req, err := http.NewRequest(http.MethodGet, q, nil)
+	req, err := http.NewRequest(http.MethodGet, baseURL+"?q="+q, nil)
 	if err != nil {
 		return nil, err
 	}
